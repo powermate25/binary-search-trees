@@ -29,36 +29,54 @@ function insert(value, tree) {
 
 //insert(70, treeNode)
 
-function deleteItem(value, tree) {
-    let currNode = tree.tree
-    while (currNode) {
-        if (value === currNode.data) {
-            clog("🚨 Found root!")
-            break
+function deleteItem(value, tree, past, future) {
+    let base = tree.tree
+    let currNode
+    base ? currNode = tree.tree : currNode = tree
+
+    if (!currNode) { return clog("Item not found!")}
+    if (value === currNode.data) {clog("🔔 Found!")}
+    if (value === currNode.data) {
+        let curr = currNode
+        clog(curr)
+        // Case 1 - no children
+        if (!curr.left && !curr.right) {curr.data = null }
+        //Case 2 - one child
+        else if (curr.left && !curr.right) {
+            curr.data = curr.left.data
+            curr.left = curr.left.left
         }
-        // First case deletion: Leaf node with no children
-        if (value < currNode.data ) {
-            let next = currNode.left
-            if (!next.left && !next.right && value === next.data) {
-                clog("🔔 Item found on left and deleted")
-                currNode.left = null
-                break  
-            }
-            currNode = currNode.left
+        else if (!curr.left && curr.right) {
+            curr.data = curr.right.data
+            curr.right = curr.right.right
         }
-        else if (value > currNode.data ) {
-            let next = currNode.right
-            if (!next.left && !next.right && value === next.data) {
-                clog("🔔 Item found on right and deleted")
-                currNode.right = null
-                break  
-            }
-            currNode = currNode.right
+        // Last case - two children
+        else if (!curr.left && curr.right) {
+            clog(past)
+            clog(future) 
+            curr.data = curr.right.data
+            curr.right = curr.right.right
         }
-        clog("🚨 Item not found!") 
+
+        return
     }
-    clog("Deletion preview")
-    prettyPrint( tree.tree ) 
+
+
+    if (value < currNode.data) {
+        past = currNode
+        future = currNode.left
+        clog("Moving left!")
+        deleteItem(value, currNode.left, past, future)
+    }
+    else if (value > currNode.data) {
+        past = currNode
+        future = currNode.right
+        clog("Moving right!")
+        deleteItem(value, currNode.right, past, future) 
+    }
 }
 
-deleteItem(324, treeNode)
+deleteItem(23, treeNode)
+clog("Deletion preview")
+prettyPrint( treeNode.tree )
+clog(treeNode.tree ) 
