@@ -3,7 +3,7 @@ import { mergeSort } from "./mergeSort.js"
 export const clog = console.log
 
 class Node {
-    constructor(data, left, right) {
+    constructor(data, left = null, right = null) { 
         this.data = data
         this.left = left
         this.right = right
@@ -12,8 +12,10 @@ class Node {
 
 class Tree {
     constructor(arr = []) {
-        this.root = root
+        this.tree = buildTree(arr)
+        this.root = this.tree.data
     }
+
 }
 
 
@@ -27,17 +29,16 @@ function buildTree(arr) {
     const arrRightSide = arr.slice(middle+1, length)
     
     const subTree = new Node(arrRoot)
-   
-    subTree.left = buildTree(arrLeftSide)
-    subTree.right = buildTree(arrRightSide)  
+    // Immediately filtering duplicates from arr using Set
+    // (following project requirements)
+    subTree.left = buildTree([... new Set(arrLeftSide)])
+    subTree.right = buildTree([... new Set(arrRightSide)])
 
     return subTree
-} 
+}
 
 
-export { buildTree }
 
-let testA = [1, 5, 2, 1, 2, 3]
- 
-let setA = [... new Set(testA)]
-clog(setA) 
+
+
+export { Node, Tree, buildTree }
