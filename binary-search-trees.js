@@ -12,8 +12,62 @@ class Node {
 
 class Tree {
     constructor(arr = []) {
-        this.tree = buildTree(arr)
-        this.root = this.tree.data
+        this.root = buildTree(arr) 
+        
+    }
+
+    insert(value) {
+        let currNode = this.root
+        let temp
+
+        while (currNode) {
+            temp = currNode
+            if (value < currNode.data) {currNode = currNode.left}
+            else if (value > currNode.data) {currNode = currNode.right}
+            else { return clog("Trying to insert existing data?") }
+        }
+
+        if ( value < temp.data ) { temp.left = new Node(value)} 
+        else if (value > temp.data ) {temp.right = new Node(value)}
+    }
+
+    deleteItem(value) {
+        this.root = this.delete(value, this.root)
+    }
+
+    delete(value, root) { 
+
+        if (root === null) { return root }
+
+        function getBestNode(curr) {
+            curr = curr.right
+            while (curr !== null && curr.left !== null){
+                curr = curr.left
+            }
+            return curr
+        }
+
+        if (value < root.data) {root.left = this.delete(value, root.left)}
+        else if (value > root.data) {root.right = this.delete(value, root.right)}
+        // Item found now. Will proceed with deletion cases
+        else {
+            if (root.left === null) { return root.right}
+            if (root.right === null) { return root.left }
+            const bestNode = getBestNode(root)
+            root.data = bestNode.data
+            root.right = this.delete(bestNode.data, root.right)
+        }
+        return root
+    }
+
+    find(value) {
+        let curr = this.root
+        if(value === curr.data) { return clog(curr) }
+        while (curr) {
+            if(value === curr.data) { return curr }
+            if (value < curr.data ) {curr = curr.left}
+            else if (value > curr.data ) {curr = curr.right}
+        }
     }
 
 }

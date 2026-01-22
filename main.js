@@ -10,73 +10,47 @@ const sortedArr = mergeSort(unsortedArr2)
 // prettyPrint(buildTree(sortedArr))
 let treeNode =  new Tree(sortedArr)
 
-function insert(value, tree) {
-    let currNode = tree.tree
-    let temp
+// insert(70, treeNode) 
 
-    while (currNode) {
-        temp = currNode
-        if (value < currNode.data) {currNode = currNode.left}
-        else if (value > currNode.data) {currNode = currNode.right}
-        else { return clog("Trying to insert existing data?") }
+function deleteItemFn(value, tree) {
+    const root = tree.root ? tree.root : tree
+    clog(root)
+
+    if (root === null) { return root }
+
+    function getBestNode(curr) {
+        curr = curr.right
+        while (curr !== null && curr.left !== null){
+            curr = curr.left
+        }
+        return curr
     }
 
-    if ( value < temp.data ) { temp.left = new Node(value)} 
-    else if (value > temp.data ) {temp.right = new Node(value)}
-    clog("Insertion preview")
-    prettyPrint( tree.tree )  
+    if (value < root.data) {root.left = deleteItemFn(value, root.left)}
+    else if (value > root.data) {root.right = deleteItemFn(value, root.right)}
+    // Item found now. Will proceed with deletion cases
+    else {
+        if (root.left === null) { return root.right}
+        if (root.right === null) { return root.left }
+        const bestNode = getBestNode(root)
+        root.data = bestNode.data
+        root.right = deleteItemFn(bestNode.data, root.right)
+    }
+    return root
 }
 
-//insert(70, treeNode)
 
-function deleteItem(value, tree, past, future) {
-    let base = tree.tree
-    let currNode
-    base ? currNode = tree.tree : currNode = tree
-
-    if (!currNode) { return clog("Item not found!")}
-    if (value === currNode.data) {clog("🔔 Found!")}
-    if (value === currNode.data) {
-        let curr = currNode
-        clog(curr)
-        // Case 1 - no children
-        if (!curr.left && !curr.right) {curr.data = null }
-        //Case 2 - one child
-        else if (curr.left && !curr.right) {
-            curr.data = curr.left.data
-            curr.left = curr.left.left
-        }
-        else if (!curr.left && curr.right) {
-            curr.data = curr.right.data
-            curr.right = curr.right.right
-        }
-        // Last case - two children
-        else if (!curr.left && curr.right) {
-            clog(past)
-            clog(future) 
-            curr.data = curr.right.data
-            curr.right = curr.right.right
-        }
-
-        return
-    }
-
-
-    if (value < currNode.data) {
-        past = currNode
-        future = currNode.left
-        clog("Moving left!")
-        deleteItem(value, currNode.left, past, future)
-    }
-    else if (value > currNode.data) {
-        past = currNode
-        future = currNode.right
-        clog("Moving right!")
-        deleteItem(value, currNode.right, past, future) 
-    }
-}
-
-deleteItem(23, treeNode)
 clog("Deletion preview")
-prettyPrint( treeNode.tree )
-clog(treeNode.tree ) 
+treeNode.deleteItem(1)
+prettyPrint(treeNode.root)
+clog(treeNode)
+
+clog("Insertion preview")
+treeNode.insert(100)
+prettyPrint(treeNode.root)
+clog(treeNode)
+
+clog("Search result")
+clog( treeNode.find(3) )
+// prettyPrint(treeNode.root)
+// clog(treeNode)
