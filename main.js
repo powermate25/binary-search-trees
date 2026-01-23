@@ -8,8 +8,8 @@ const unsortedArr = [3, 2, 1, 13, 8, 5, 0, 18]
 const unsortedArr2 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 const sortedArr = mergeSort(unsortedArr2)
 // prettyPrint(buildTree(sortedArr))
-let treeNode =  new Tree(sortedArr)
-
+/* let treeNode =  new Tree(sortedArr) */
+let treeNode =  new Tree([1,2,3,4,5,6,7])
 // insert(70, treeNode) 
 
 function deleteItemFn(value, tree) {
@@ -40,18 +40,20 @@ function deleteItemFn(value, tree) {
 }
 
 
-clog("Deletion preview")
-treeNode.deleteItem(1)
-prettyPrint(treeNode.root)
-clog(treeNode)
+//clog("Deletion preview")
+//treeNode.deleteItem(1)
+//prettyPrint(treeNode.root)
+//clog(treeNode)
 
 clog("Insertion preview")
-treeNode.insert(100)
+//treeNode.insert(100)
 prettyPrint(treeNode.root)
-clog(treeNode)
+//clog(treeNode)
 
 clog("Search result")
-clog( treeNode.find(3) )
+//clog( treeNode.find(3) )
 // prettyPrint(treeNode.root)
 // clog(treeNode)
 // clog ( treeNode.levelOrderForEach( i => clog(i) ) ) 
+
+// clog( treeNode.inOrderForEach(i => clog(i)) )

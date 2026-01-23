@@ -87,6 +87,71 @@ class Tree {
         }
         return result.forEach( i => callback(i) )
     }
+
+    
+    inOrder(root = this.root, masterQueue = []) {
+        
+        if (!root) {return root }
+        
+        if(root.left) {
+            this.inOrder(root.left, masterQueue) 
+            masterQueue.push(root.left) 
+        }
+        if(root) {
+            masterQueue.push(root)
+        }
+        if(root.right) {
+            this.inOrder(root.right, masterQueue) 
+            masterQueue.push(root.right) 
+        }
+
+        /* if(root.left && root.right) {
+            this.inOrderForEach(root.left, masterQueue) 
+            masterQueue.push(root.left)
+            masterQueue.push(root.right)
+            
+        } */
+        /* if(root.left) {
+            this.inOrderForEach(root.left, masterQueue)  
+            masterQueue.push(root.left) 
+        } */
+        /* if(root.right) {
+            masterQueue.push(root.right)
+            root.right = this.inOrderForEach(root.right, masterQueue)
+        }  */
+
+        // if(root.right) {masterQueue.push(root.right)}
+        
+        return [... new Set(masterQueue)]
+    }
+    inOrderForEach(callback) {
+        if(!callback) {throw Error("No callback specified")} 
+        const result = this.inOrder()
+        return result.forEach( i => callback(i) )
+
+    }
+
+    preOrder(root = this.root, masterQueue = []) {
+        if (!root) {return root }
+        
+        if(root.left) {
+            this.preOrder(root.left, masterQueue) 
+            masterQueue.push(root.left) 
+        }
+        if(root) {
+            masterQueue.push(root)
+        }
+        if(root.right) {
+            this.preOrder(root.right, masterQueue) 
+            masterQueue.push(root.right) 
+        }
+        
+        return [... new Set(masterQueue)]
+    }
+
+    
+    
+         
 }
 
 
