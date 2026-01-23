@@ -70,6 +70,23 @@ class Tree {
         }
     }
 
+    levelOrderForEach(callback) {
+        if(!callback) {throw Error("No callback specified")}
+        const root = this.root
+        if (!root) {return} 
+        const masterQueue = []
+        const result = []
+        masterQueue.push(root)
+        while (masterQueue.length > 0) {
+            let curr = masterQueue[0]
+            // clog(curr.data)
+            result.push(curr)
+            if (curr.left) {masterQueue.push(curr.left)}
+            if (curr.right) {masterQueue.push(curr.right)}
+            masterQueue.shift()
+        }
+        return result.forEach( i => callback(i) )
+    }
 }
 
 
