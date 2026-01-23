@@ -189,7 +189,58 @@ class Tree {
         const result = this.postOrder()
         return result.forEach(i => callback(i)) 
     }
-     
+
+    depth() {
+        const leaf = this.postOrder()[0].data
+        let curr = this.root
+        let count = -1
+        if(leaf === curr.data) {
+            count++
+            //clog(count)
+            return count 
+        }
+        while (curr) {
+            count++
+            if(leaf === curr.data) { 
+                //clog(count) 
+                return count
+            }
+            if (leaf < curr.data ) {curr = curr.left}
+            else if (leaf > curr.data ) {curr = curr.right}
+        }
+        return count
+    }
+
+    height(value) {
+        if (value == null) {return}
+        let curr = this.root
+        let count = -1
+        if (value === curr.data) {
+            //clog(curr)
+            return this.depth()
+        }
+        while (curr) {
+            count ++
+            if(value === curr.data) {
+                //clog(curr)
+                return this.depth() - count 
+            }
+            if (value < curr.data ) { curr = curr.left }
+            else if (value > curr.data ) { curr = curr.right }
+        }
+        return null
+    }
+
+    isBalanced() {
+        const right = this.preOrder()
+        const rightSubTree = right[right.length - 1]
+        const left = this.postOrder()
+        const leftSubTree = left[0]
+        const result = this.height(rightSubTree.data) - this.height(leftSubTree.data)
+        if (result === 0 || result === 1 || result === -1) {return true}
+        else {return false}
+    }
+
 }
 
 

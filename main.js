@@ -6,10 +6,11 @@ import { prettyPrint } from "./prettyPrint.js"
 
 const unsortedArr = [3, 2, 1, 13, 8, 5, 0, 18]
 const unsortedArr2 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-const sortedArr = mergeSort(unsortedArr2)
+const unsortedArr3 = [1, 7, 4, 23, 8, 9, 3, 5, 67, 6345, 324, 10, 32, 56, 59, 30, 457, 200, 122, 322, 444, 44]
+const sortedArr = mergeSort(unsortedArr3)
 // prettyPrint(buildTree(sortedArr))
-/* let treeNode =  new Tree(sortedArr) */
-let treeNode =  new Tree([1, 2, 3, 4, 5, 6, 7])
+/* let treeNode =  new Tree(sortedArr) */ 
+let treeNode =  new Tree(sortedArr) 
 // insert(70, treeNode) 
 
 function deleteItemFn(value, tree) {
@@ -46,8 +47,8 @@ function deleteItemFn(value, tree) {
 //clog(treeNode)
 
 clog("Insertion preview")
-//treeNode.insert(100)
-prettyPrint(treeNode.root)
+treeNode.insert(1) 
+prettyPrint(treeNode.root) 
 //clog(treeNode)
 
 clog("Search result")
@@ -57,6 +58,11 @@ clog("Search result")
 // clog ( treeNode.levelOrderForEach( i => clog(i) ) ) 
 
 // clog( treeNode.inOrderForEach(i => clog(i)) )
-// clog( treeNode.postOrderForEach(i=>clog(i)) ) 
+//clog( treeNode.postOrderForEach(i=>clog(i)) ) 
+//clog( treeNode.preOrder() )
+//clog( treeNode.postOrder() )
+//clog( treeNode.depth() )
+//clog( treeNode.height( 1) )
 
-clog( treeNode.height() )
+clog( treeNode.isBalanced() )
+ 
