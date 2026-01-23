@@ -9,7 +9,7 @@ const unsortedArr2 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 const sortedArr = mergeSort(unsortedArr2)
 // prettyPrint(buildTree(sortedArr))
 /* let treeNode =  new Tree(sortedArr) */
-let treeNode =  new Tree([1,2,3,4,5,6,7])
+let treeNode =  new Tree([1, 2, 3, 4, 5, 6, 7])
 // insert(70, treeNode) 
 
 function deleteItemFn(value, tree) {
@@ -57,3 +57,6 @@ clog("Search result")
 // clog ( treeNode.levelOrderForEach( i => clog(i) ) ) 
 
 // clog( treeNode.inOrderForEach(i => clog(i)) )
+// clog( treeNode.postOrderForEach(i=>clog(i)) ) 
+
+clog( treeNode.height() )

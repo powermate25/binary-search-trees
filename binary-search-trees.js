@@ -2,6 +2,25 @@ import { mergeSort } from "./mergeSort.js"
 
 export const clog = console.log
 
+// Code
+function buildTree(arr) {
+    const length = arr.length
+    if(length < 1) {return null}
+
+    const middle = Math.floor( length/2 )
+    const arrRoot = arr[middle]
+    const arrLeftSide = arr.slice(0, middle)
+    const arrRightSide = arr.slice(middle+1, length)
+    
+    const subTree = new Node(arrRoot)
+    // Immediately filtering duplicates from arr using Set
+    // (following project requirements)
+    subTree.left = buildTree([... new Set(arrLeftSide)])
+    subTree.right = buildTree([... new Set(arrRightSide)])
+
+    return subTree
+}
+
 class Node {
     constructor(data, left = null, right = null) { 
         this.data = data
@@ -88,7 +107,7 @@ class Tree {
         return result.forEach( i => callback(i) )
     }
 
-    
+    // InOrder Method 
     inOrder(root = this.root, masterQueue = []) {
         
         if (!root) {return root }
@@ -97,33 +116,19 @@ class Tree {
             this.inOrder(root.left, masterQueue) 
             masterQueue.push(root.left) 
         }
+
         if(root) {
             masterQueue.push(root)
         }
+
         if(root.right) {
             this.inOrder(root.right, masterQueue) 
             masterQueue.push(root.right) 
         }
 
-        /* if(root.left && root.right) {
-            this.inOrderForEach(root.left, masterQueue) 
-            masterQueue.push(root.left)
-            masterQueue.push(root.right)
-            
-        } */
-        /* if(root.left) {
-            this.inOrderForEach(root.left, masterQueue)  
-            masterQueue.push(root.left) 
-        } */
-        /* if(root.right) {
-            masterQueue.push(root.right)
-            root.right = this.inOrderForEach(root.right, masterQueue)
-        }  */
-
-        // if(root.right) {masterQueue.push(root.right)}
-        
         return [... new Set(masterQueue)]
     }
+
     inOrderForEach(callback) {
         if(!callback) {throw Error("No callback specified")} 
         const result = this.inOrder()
@@ -131,16 +136,18 @@ class Tree {
 
     }
 
+    // PreOrder Method 
     preOrder(root = this.root, masterQueue = []) {
         if (!root) {return root }
-        
+        if(root) {
+            masterQueue.push(root)
+        }
+
         if(root.left) {
             this.preOrder(root.left, masterQueue) 
             masterQueue.push(root.left) 
         }
-        if(root) {
-            masterQueue.push(root)
-        }
+        
         if(root.right) {
             this.preOrder(root.right, masterQueue) 
             masterQueue.push(root.right) 
@@ -149,29 +156,44 @@ class Tree {
         return [... new Set(masterQueue)]
     }
 
-    
-    
-         
+    preOrderForEach(callback) {
+        if(!callback) {throw Error("No callback specified")}
+        const result = this.preOrder()
+        return result.forEach(i => callback(i)) 
+    }
+
+    // PostOrder Method 
+    postOrder(root = this.root, masterQueue = []) {
+        if (!root) {return root }
+
+        if(root.left) {
+            this.postOrder(root.left, masterQueue) 
+            masterQueue.push(root.left) 
+        }
+        
+        if(root.right) {
+            this.postOrder(root.right, masterQueue) 
+            masterQueue.push(root.right) 
+        }
+
+        if(root) {
+            masterQueue.push(root)
+        }
+        
+        
+        return [... new Set(masterQueue)]
+    }
+
+    postOrderForEach(callback) {
+        if(!callback) {throw Error("No callback specified")}
+        const result = this.postOrder()
+        return result.forEach(i => callback(i)) 
+    }
+     
 }
 
 
-function buildTree(arr) {
-    const length = arr.length
-    if(length < 1) {return null}
 
-    const middle = Math.floor( length/2 )
-    const arrRoot = arr[middle]
-    const arrLeftSide = arr.slice(0, middle)
-    const arrRightSide = arr.slice(middle+1, length)
-    
-    const subTree = new Node(arrRoot)
-    // Immediately filtering duplicates from arr using Set
-    // (following project requirements)
-    subTree.left = buildTree([... new Set(arrLeftSide)])
-    subTree.right = buildTree([... new Set(arrRightSide)])
-
-    return subTree
-}
 
 
 
