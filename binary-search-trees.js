@@ -296,9 +296,10 @@ class Tree {
         
             const left = this.checkBalance(root.left) + 1
             const right = this.checkBalance(root.right) + 1
+            // Breaking the recursion if a node is not balanced.
+            // NaN is returned at breakpoint. otherwise depth value returned.
+            // Uncomment clog line below to reveal exact breakpoint in console.
             // clog( `left: ${left}. right: ${right}.` )
-            // this is the check that inform if a node is not balanced
-            // by forcing the recursion to return NaN (hopefully)
             if ( Math.abs(left - right) > 1 ) { return }
             
         return Math.max(left, right)
