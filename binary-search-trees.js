@@ -1,23 +1,52 @@
-import { mergeSort } from "./mergeSort.js"
-
 export const clog = console.log
 
 // Code
-function buildTree(arr) {
+
+// MergeSort
+function mergeSort(arr){
+
+    let length = arr.length
+    if ( length <= 1 ) { return arr }
+    let middleIndex = Math.floor(length / 2)
+    let left = arr.slice(0, middleIndex)
+    let right = arr.slice(middleIndex, length)
+
+    left = mergeSort(left) 
+    right = mergeSort(right)
+
+    function merge(leftArr, rightArr) {
+        let result = []
+        let x = 0
+        let z = 0
+
+        while ( x < leftArr.length && z < rightArr.length) {
+            if (leftArr[x] < rightArr[z]) {
+                result.push(leftArr[x])
+                x += 1
+            } 
+            else {
+                result.push(rightArr[z])
+                z += 1
+            }
+        }
+       return result.concat(leftArr.slice(x)).concat(rightArr.slice(z))
+    }
+    return merge(left, right)
+}
+
+// BuildTree
+function buildTree( arr ) {
     const length = arr.length
     if(length < 1) {return null}
-
     const middle = Math.floor( length/2 )
     const arrRoot = arr[middle]
     const arrLeftSide = arr.slice(0, middle)
     const arrRightSide = arr.slice(middle+1, length)
-    
     const subTree = new Node(arrRoot)
     // Immediately filtering duplicates from arr using Set
     // (following project requirements)
     subTree.left = buildTree([... new Set(arrLeftSide)])
     subTree.right = buildTree([... new Set(arrRightSide)])
-
     return subTree
 }
 
@@ -31,7 +60,8 @@ class Node {
 
 class Tree {
     constructor(arr = []) {
-        this.root = buildTree(arr) 
+        this.sortedArr = mergeSort(arr) 
+        this.root = buildTree(this.sortedArr) 
         
     }
 
@@ -48,10 +78,6 @@ class Tree {
 
         if ( value < temp.data ) { temp.left = new Node(value)} 
         else if (value > temp.data ) {temp.right = new Node(value)}
-    }
-
-    deleteItem(value) {
-        this.root = this.delete(value, this.root)
     }
 
     delete(value, root) { 
@@ -79,18 +105,24 @@ class Tree {
         return root
     }
 
+    deleteItem(value) {
+        this.root = this.delete(value, this.root)
+    }
+
     find(value) {
         let curr = this.root
-        if(value === curr.data) { return clog(curr) }
+        if(value === curr.data) { return curr }
         while (curr) {
             if(value === curr.data) { return curr }
             if (value < curr.data ) {curr = curr.left}
             else if (value > curr.data ) {curr = curr.right}
         }
+        
+        return undefined
     }
 
-    levelOrderForEach(callback) {
-        if(!callback) {throw Error("No callback specified")}
+    levelOrder(callback) {
+        
         const root = this.root
         if (!root) {return} 
         const masterQueue = []
@@ -104,7 +136,14 @@ class Tree {
             if (curr.right) {masterQueue.push(curr.right)}
             masterQueue.shift()
         }
+        return result
+    }
+
+    levelOrderForEach(callback) {
+        if(!callback) {throw Error("No callback specified")} 
+        const result = this.levelOrder()
         return result.forEach( i => callback(i) )
+
     }
 
     // InOrder Method 
@@ -190,25 +229,46 @@ class Tree {
         return result.forEach(i => callback(i)) 
     }
 
-    depth() {
-        const leaf = this.postOrder()[0].data
+    depth(value) {
+        if (!value) {return this.maximumDepth() }
         let curr = this.root
-        let count = -1
-        if(leaf === curr.data) {
-            count++
-            //clog(count)
-            return count 
-        }
+        let count = 0
+        if(value === curr.data) { return count }
         while (curr) {
-            count++
-            if(leaf === curr.data) { 
-                //clog(count) 
-                return count
-            }
-            if (leaf < curr.data ) {curr = curr.left}
-            else if (leaf > curr.data ) {curr = curr.right}
+            if(value === curr.data) { return count}
+            if(curr.left || curr.right) {count ++}
+            if (value < curr.data ) {curr = curr.left}
+            else if (value > curr.data ) {curr = curr.right}
         }
-        return count
+        
+        return null
+    }
+
+    maximumDepth(root = this.root) {
+        if (!root) {return -1}
+        const left = this.maximumDepth(root.left) + 1
+        const right = this.maximumDepth(root.right) + 1
+        return Math.max(left, right)
+    }
+
+    deepestLeaves( root = this.root, result = [] ) {
+        if (!root.left && !root.right) {
+            result.push(root)
+            return root
+        }
+
+        if (root.left) {let left = this.deepestLeaves(root.left, result)}
+        if (root.right) {let right = this.deepestLeaves(root.right, result) }
+
+        let i = 0
+        let curr = result[i]
+        
+        while(i < result.length) {
+            curr = curr.data < result[i++].data ? result[i++] : curr
+            i += 1
+        }
+        
+        return result 
     }
 
     height(value) {
@@ -216,38 +276,46 @@ class Tree {
         let curr = this.root
         let count = -1
         if (value === curr.data) {
-            //clog(curr)
             return this.depth()
         }
+        
         while (curr) {
             count ++
             if(value === curr.data) {
-                //clog(curr)
-                return this.depth() - count 
+                return this.maximumDepth() - count 
             }
             if (value < curr.data ) { curr = curr.left }
             else if (value > curr.data ) { curr = curr.right }
         }
+        
         return null
     }
 
-    isBalanced() {
-        const right = this.preOrder()
-        const rightSubTree = right[right.length - 1]
-        const left = this.postOrder()
-        const leftSubTree = left[0]
-        const result = this.height(rightSubTree.data) - this.height(leftSubTree.data)
-        if (result === 0 || result === 1 || result === -1) {return true}
-        else {return false}
+    checkBalance(root = this.root) {
+        if(!root) {return -1}
+        
+            const left = this.checkBalance(root.left) + 1
+            const right = this.checkBalance(root.right) + 1
+            clog( `left: ${left}. right: ${right}.` )
+            // this is the check that inform if a node is not balanced
+            // by forcing the recursion to return NaN (hopefully)
+            if ( Math.abs(left - right) > 1 ) { return }
+            
+        return Math.max(left, right)
     }
 
+    isBalanced() {
+        let result = this.checkBalance()
+        return result * 0 === 0
+    }
+
+    rebalance() {
+        let newSortedArr = []
+        this.inOrderForEach(i => newSortedArr.push(i.data) )
+        this.root = buildTree(newSortedArr)
+    }
+    
 }
 
 
-
-
-
-
-
-
-export { Node, Tree, buildTree }
+export { mergeSort, Node, Tree, buildTree }
