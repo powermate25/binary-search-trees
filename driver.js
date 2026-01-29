@@ -13,7 +13,7 @@ function randomNumGenerator(length) {
         while (randomNum > 99) {
             randomNum = Math.random().toFixed(2) * 100
         }
-        num = Number( randomNum.toFixed() )
+        const num = Number( randomNum.toFixed() )
         arr.push(num)
         arr = [... new Set(arr) ]
     }
@@ -21,22 +21,74 @@ function randomNumGenerator(length) {
     return arr
 }
 
+// 1. New binary tree from random array generator
+const randomUnsortedArr = randomNumGenerator(27)
+clog("Random unsorted array")
+clog(randomUnsortedArr)
 
-const unsortedArr = [3, 2, 1, 13, 8, 5, 0, 18]
-const unsortedArr2 = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-const unsortedArr3 = [1, 7, 4, 23, 8, 9, 3, 5, 67, 6345, 324, 10, 32, 56, 59, 30, 457, 200, 122, 322, 444, 44]
+clog("1. New balanced binary tree from random generated array")
+const randomTree = new Tree(randomUnsortedArr)
 
-const tree1 =  new Tree(unsortedArr)
-clog( tree1.insert(50) )
-clog( tree1.insert(51) )
-clog( tree1.insert(52) )
-clog( tree1.insert(55) )
-clog(tree1.deleteItem(50) )
-clog( tree1.find(8) )
-clog( tree1.depth(13) )
-clog( tree1.rebalance() )
-clog( tree1.isBalanced() )
+clog("Balanced tree root")
+clog(randomTree.root)
+
+// 2. Checking tree balance
+clog("2. Checking tree balance")
+clog("Expecting result: true")
+clog( randomTree.isBalanced() )
+
+// 3. Printing in order
+clog("3. Printing in order")
+clog("Level Order")
+clog( randomTree.levelOrder() )
+
+clog("Pre Order")
+clog( randomTree.levelOrder() )
+
+clog("Post Order")
+clog( randomTree.postOrder() )
+
+clog("In Order")
+clog( randomTree.inOrder() )
+
+// 4. Unbalancing tree
+clog("4. Unbalancing tree by inserting new values greater than 100")
+clog( randomTree.insert(101) )
+clog( randomTree.insert(111) )
+clog( randomTree.insert(125) )
+
+clog("Unbalanced tree preview")
+clog( prettyPrint(randomTree.root) )
+
+// 5. Confirming unbalanced tree
+clog("5. Confirming unbalanced tree")
+clog("Expecting result: false")
+clog( randomTree.isBalanced() )
+
+// 6. Rebalancing tree
+clog("6. Rebalancing tree")
+clog( randomTree.rebalance() )
+
+// 7. Confirming balanced tree
+clog("7. Confirming balanced tree")
+clog("Expecting result: true")
+clog( randomTree.isBalanced() )
+
+// 8. Printing out tree elements
+clog("8. Printing out tree elements")
+clog("Level Order")
+clog( randomTree.levelOrder() )
+
+clog("Pre Order")
+clog( randomTree.levelOrder() )
+
+clog("Post Order")
+clog( randomTree.postOrder() )
+
+clog("In Order")
+clog( randomTree.inOrder() )
 
 
-clog( prettyPrint( tree1.root) )
-
+// PrettyPrint
+clog("Final tree preview")
+clog( prettyPrint(randomTree.root) )

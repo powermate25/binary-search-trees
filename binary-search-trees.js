@@ -296,7 +296,7 @@ class Tree {
         
             const left = this.checkBalance(root.left) + 1
             const right = this.checkBalance(root.right) + 1
-            clog( `left: ${left}. right: ${right}.` )
+            // clog( `left: ${left}. right: ${right}.` )
             // this is the check that inform if a node is not balanced
             // by forcing the recursion to return NaN (hopefully)
             if ( Math.abs(left - right) > 1 ) { return }
